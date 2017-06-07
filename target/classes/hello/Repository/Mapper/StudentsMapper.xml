@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.Repository.Mapper.StudentsMapper">
+
+    <resultMap id="student" type="Student">
+        <id property="id" column="id"/>
+        <result property="studentname" column="studentname"/>
+        <result property="department" column="department"/>
+        <result property="grade" column="grade"/>
+        <result property="usual_grade" column="usual_grade"/>
+        <result property="design_grade" column="design_grade"/>
+        <result property="exam_grade" column="exam_grade"/>
+    </resultMap>
+
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        student (id, studentname, department,grade,usual_grade,design_grade,exam_grade)
+        VALUES
+        (#{id}, #{studentname}, #{department},#{grade},#{usual_grade},#{design_grade},#{exam_grade})
+    </insert>
+
+    <update id="updateStudent">
+        UPDATE
+        student
+        SET
+        id = #{id},studentname = #{studentname},department = #{department},grade = #{grade},usual_grade = #{usual_grade},
+        design_grade = #{design_grade}, exam_grade = #{exam_grade}
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <delete id="deleteStudentById">
+        DELETE FROM
+        student
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="selectStudentById" resultMap="student">
+        SELECT
+        *
+        FROM
+        student
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="selectStudentByName" resultMap="student">
+        SELECT
+        *
+        FROM
+        student
+        WHERE
+        studentname = #{studentname},
+    </select>
+
+    <select id="selectAllStudents" resultMap="student">
+        SELECT
+        *
+        FROM
+        student
+    </select>
+
+</mapper>
