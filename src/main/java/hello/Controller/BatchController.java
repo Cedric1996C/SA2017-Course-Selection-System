@@ -1,5 +1,7 @@
 package hello.Controller;
 
+import com.github.pagehelper.PageInfo;
+import hello.Entity.Student;
 import hello.Exception.StorageException;
 import hello.Service.implement.ImportServiceImpl;
 import hello.Service.implement.StudentServiceImpl;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by njucong on 2017/5/31.
@@ -28,6 +31,9 @@ public class BatchController {
     private static Log log = LogFactory.getLog(BatchController.class);
 
     @Autowired
+    StudentServiceImpl studentService;
+
+    @Autowired
     private Job job;
 
     @Autowired
@@ -37,7 +43,7 @@ public class BatchController {
 
     @RequestMapping(value = "",method = RequestMethod.POST)
     @ResponseBody
-    public String batchimport(@RequestParam(value="filename") MultipartFile file) throws IOException {
+    public PageInfo<Student> batchimport(@RequestParam(value="filename") MultipartFile file) throws IOException {
 
         log.info("BatchController ..batchimport() start");
 
@@ -48,15 +54,15 @@ public class BatchController {
                         .addLong("time", System.currentTimeMillis())
                         .toJobParameters());
         } catch (StorageException e) {
-            return "You failed to uploaded " + file.getOriginalFilename() + "!";
+           return null;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Failed to convert xlsx file.");
-            return "Failed to convert " + file.getOriginalFilename() + "!";
+            return null;
         }
 
-        //importService.delete();
-        return "redirect:/";
+        List<Student> studentList = studentService.getAll();
+        return new PageInfo<Student>(studentList);
     }
 
 

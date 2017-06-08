@@ -7,9 +7,11 @@ import hello.Repository.Mapper.StudentsMapper;
 import hello.Repository.StudentRepository;
 import hello.Service.StudentService;
 import hello.Service.implement.StudentServiceImpl;
+import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -26,10 +28,11 @@ public class StudentController {
    @Autowired
    StudentServiceImpl studentService;
 
-   @RequestMapping
+   @RequestMapping(method = RequestMethod.GET)
+   @ResponseBody
    public PageInfo<Student> getAll() {
-       List<Student> studentList = studentService.getAll();
-       return new PageInfo<Student>(studentList);
+       PageInfo<Student> list = studentService.selectStudents(1,10);
+       return list;
    }
 
     @RequestMapping(value = "/pageInfo", method = RequestMethod.POST)

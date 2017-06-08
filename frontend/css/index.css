@@ -11,3 +11,5 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 div#dialog-import button{
 	float:right;
 }
+div#page-helper div {  float: left; margin-top: 60px ;  width: 20%;}
+#lastPage,#nextPage { float: left; }

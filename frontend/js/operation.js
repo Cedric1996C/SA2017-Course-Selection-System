@@ -6,8 +6,29 @@
         usual_grade = $( "#usual"),
         design_grade = $("#design"),
         exam_grade = $( "#exam"), 
-        rowindex = $( "#rowindex" ),  
-        allFields = $( [] ).add( stu_number ).add( name ).add( department ).add( total ).add( rowindex );  
+        rowindex = $( "#rowindex" ),
+        student_list = [],  
+        allFields = $( [] ).add( stu_number ).add( name ).add( department ).add( total ).add( rowindex );
+
+        var pageInfo = new Object();
+        pageInfo.pageNum = 1;
+        pageInfo.pageSize = 10;  
+
+        function getStudents(){
+            $.ajax({
+                url: 'http://localhost:9000/students',
+                type: 'GET',
+                dataType:'json',               
+                }).done(function(res) {
+                    removeData();
+                    student_list = res.list;
+                    createData(student_list);
+                }).fail(function(res) {
+                    console.log(res);
+                });
+        }
+
+        getStudents();
 
         $( "#dialog-form" ).dialog({  
             autoOpen: false,  
@@ -33,18 +54,13 @@
                             dataType:'json',
                             data: student
                         }).done(function(res) {
-                            console.log(res);
+                            removeData();
+                            student_list = res.list;
+                            createData(student_list);
                         }).fail(function(res) {
                             console.log(res);
                         });
 
-                        $( "#users tbody" ).append( "<tr>" +  
-                            "<td>" + stu_number.val() + "</td>" +   
-                            "<td>" + name.val() + "</td>" +   
-                            "<td>" + department.val() + "</td>" +  
-                            "<td>" + total.val() + "</td>" + 
-                            '<td><button class="EditButton">修改</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>'+  
-                            "</tr>" );   
                         bindEvent();  
                     }  
                     else{//修改  
@@ -62,12 +78,10 @@
                             cache: false,
                             dataType:'json',
                             data: student,
-                            // headers : {
-                            //      'Accept' : 'application/json',
-                            //      'Content-Type' : 'application/json'
-                            //    }
                         }).done(function(res) {
-                            console.log(res);
+                            removeData();
+                            student_list = res.list;
+                            createData(student_list);
                         }).fail(function(res) {
                             console.log(res);
                         });   
@@ -101,7 +115,9 @@
                         processData: false,
                         contentType: false
                     }).done(function(res) {
-                        console.log(res);
+                        removeData();
+                        student_list = res.list;
+                        createData(student_list);
                     }).fail(function(res) {
 
                     });
@@ -139,7 +155,9 @@
                         dataType:'json',
                         data: student
                     }).done(function(res) {
-                        console.log(res);
+                        removeData();
+                        student_list = res.list;
+                        createData(student_list);
                     }).fail(function(res) {
                         console.log(res);
                     });   
@@ -173,6 +191,8 @@
 
                 //打开对话框  
                 $( "#dialog-form" ).dialog( "open" );  
+
+                bindEvent();
             });  
 
             //绑定Delete按钮的单击事件  
@@ -192,12 +212,15 @@
                     cache: false,
                     dataType:'json'
                 }).done(function(res) {
-                    console.log(res);
+                    removeData();
+                    student_list = res.list;
+                    createData(student_list);
                 }).fail(function(res) {
                     console.log(res);
                 });    
                 var tr = $(this).parents("tr");  
                 tr.remove();  
+                bindEvent();
             }); 
 
             //绑定Grade按钮的单击事件
@@ -212,8 +235,48 @@
                 total.val(tds.eq(3).text());  
 
                 $("#dialog-grade").dialog("open");
+                bindEvent();
             });
         };  
+
+        $(".lastPage")
+        .button()
+        .click(function(){
+                if(pageInfo.pageNum>1)
+                    pageInfo.pageNum--;
+                $.ajax({
+                    url: 'http://localhost:9000/students/pageInfo',
+                    type: 'POST',
+                    data: pageInfo,
+                    cache: false,
+                    dataType:'json'
+                }).done(function(res) {
+                    removeData();
+                    student_list = res.list;
+                    createData(student_list);
+                }).fail(function(res) {
+                    console.log(res);
+                });    
+        });
+
+        $(".nextPage")
+        .button()
+        .click(function(){
+            pageInfo.pageNum++;
+            $.ajax({
+                url: 'http://localhost:9000/students/pageInfo',
+                type: 'POST',
+                data: pageInfo,
+                cache: false,
+                dataType:'json'
+            }).done(function(res) {
+                removeData();
+                student_list = res.list;
+                createData(student_list);
+            }).fail(function(res) {
+                console.log(res);
+            });    
+        });
 
         bindEvent();  
 
@@ -232,7 +295,28 @@
         .click(function(){
                 //导入本地文件  
                 $( "#dialog-import" ).dialog( "open" );  
-            })
+        })
+
+        function removeData(){
+            var body = document.getElementById("students");
+            while(body.hasChildNodes()) {//当div下还存在子节点时 循环继续
+                body.removeChild(body.firstChild);
+            }
+        }
+
+        function createData(res){
+            for (var i=0;i<student_list.length;i++){
+                $( "#users tbody" ).append( "<tr>" +  
+                            "<td>" + res[i].id + "</td>" +   
+                            "<td>" + res[i].studentname + "</td>" +   
+                            "<td>" + res[i].department + "</td>" +  
+                            "<td>" + res[i].grade + "</td>" + 
+                            '<td><button class="EditButton">修改</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>'+  
+                            "</tr>" );
+            }
+            bindEvent();
+        }
+
     });
 
 

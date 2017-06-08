@@ -21,6 +21,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers(HttpMethod.POST, "/students/pageInfo").permitAll()
                 .antMatchers("/batchimport").permitAll()
                 .antMatchers(HttpMethod.POST, "/students/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/students").permitAll()
                 .antMatchers(HttpMethod.POST,"/students/add").permitAll()
                 .antMatchers(HttpMethod.POST,"/students/update").permitAll()
                 .antMatchers(HttpMethod.POST, "/students/delete").permitAll()

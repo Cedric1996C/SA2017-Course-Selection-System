@@ -45,7 +45,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public void updateStudent(Student student){
-     //   System.out.println(student);
+        Integer temp = (student.getUsual_grade()+student.getDesign_grade()+student.getExam_grade())/3;
+        if(temp.intValue()>0)
+            student.setGrade(Integer.toString(temp.intValue()));
         studentRepository.updateStudent(student);
     }
 }
