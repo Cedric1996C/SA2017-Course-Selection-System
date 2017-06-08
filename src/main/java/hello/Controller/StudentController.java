@@ -48,17 +48,18 @@ public class StudentController {
         return new PageInfo<Student>(studentList);
     }
 
-    @RequestMapping(value =  "/delete/{id}")
-    public PageInfo<Student> deleteStudent (@PathVariable Long id){
+    @RequestMapping(value =  "/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<Student> deleteStudent (Long id){
         studentService.deleteById(id);
         List<Student> studentList = studentService.getAll();
         return new PageInfo<Student>(studentList);
     }
 
     @RequestMapping( value = "/update",method = RequestMethod.POST)
+    @ResponseBody
     public PageInfo<Student> updateStudent (Long id, String name, String department, String grade , Integer usual_grade,Integer design_grade,Integer exam_grade){
         Student student = new Student(id,name,department,grade,usual_grade,design_grade,exam_grade);
-        System.out.print(student);
         studentService.updateStudent(student);
         List<Student> studentList = studentService.getAll();
         return new PageInfo<Student>(studentList);

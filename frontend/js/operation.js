@@ -15,17 +15,17 @@
             width: 480,  
             modal: true,  
             buttons: {  
-                "新建": function() {  
+                "确认": function() { 
+                    var student = new Object();
+                    student.id = stu_number.val();
+                    student.name = name.val();
+                    student.department = department.val();
+                    student.grade = total.val();
+                    student.usual_grade = "0";
+                    student.design_grade = "0";
+                    student.exam_grade = "0";
+ 
                     if (rowindex.val()==""){//新增 
-                        var student = new Object();
-                        student.id = stu_number.val();
-                        student.name = name.val();
-                        student.department = department.val();
-                        student.total = total.val();
-                        student.usual_grade = "0";
-                        student.design_grade = "0";
-                        student.exam_grade = "0";
-
                           $.ajax({
                             url: 'http://localhost:9000/students/add',
                             type: 'POST',
@@ -51,41 +51,13 @@
                         var idx = rowindex.val();  
                         var tr = $("#users>tbody>tr").eq(idx);  
                         //$("#debug").text(tr.html());  
-                        tr.children().eq(0).text(name.val());  
-                        tr.children().eq(1).text(email.val());  
-                        tr.children().eq(2).text(password.val());  
-                    }  
-                    $( this ).dialog( "close" );  
-                },  
-                "取消": function() {  
-                    $( this ).dialog( "close" );  
-                }  
-            },  
-            close: function() {  
-                //allFields.val( "" ).removeClass( "ui-state-error" );  
-                ;  
-            }  
-        });
+                        tr.children().eq(0).text(stu_number.val());  
+                        tr.children().eq(1).text(name.val());  
+                        tr.children().eq(2).text(department.val()); 
+                        tr.children().eq(3).text(total.val()); 
 
-        $( "#dialog-modify" ).dialog({  
-            autoOpen: false,  
-            height: 300,  
-            width: 480,  
-            modal: true,  
-            buttons: {  
-                "确认": function() {  
-                    if (rowindex.val()==""){//新增 
-                        var student = new Object();
-                        student.id = stu_number.val();
-                        student.name = name.val();
-                        student.department = department.val();
-                        student.total = total.val();
-                        student.usual_grade = usual_grade.val();
-                        student.design_grade = design_grade.val();
-                        student.exam_grade = exam_grade.val();
-
-                          $.ajax({
-                            url: 'http://localhost:9000/students/add',
+                        $.ajax({
+                            url: 'http://localhost:9000/students/update',
                             type: 'POST',
                             cache: false,
                             dataType:'json',
@@ -98,24 +70,9 @@
                             console.log(res);
                         }).fail(function(res) {
                             console.log(res);
-                        });
-
-                        $( "#users tbody" ).append( "<tr>" +  
-                            "<td>" + stu_number.val() + "</td>" +   
-                            "<td>" + name.val() + "</td>" +   
-                            "<td>" + department.val() + "</td>" +  
-                            "<td>" + total.val() + "</td>" + 
-                            '<td><button class="EditButton">修改</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>'+  
-                            "</tr>" );   
+                        });   
                         bindEvent();  
-                    }  
-                    else{//修改  
-                        var idx = rowindex.val();  
-                        var tr = $("#users>tbody>tr").eq(idx);  
-                        //$("#debug").text(tr.html());  
-                        tr.children().eq(0).text(name.val());  
-                        tr.children().eq(1).text(email.val());  
-                        tr.children().eq(2).text(password.val());  
+                        $( this ).dialog( "close" );    
                     }  
                     $( this ).dialog( "close" );  
                 },  
@@ -166,7 +123,27 @@
             modal: true,
             buttons: {
                 "确认": function(){
-                    /**/
+                    var student = new Object();
+                    student.id = stu_number.val();
+                    student.name = name.val();
+                    student.department = department.val();
+                    student.grade = total.val();
+                    student.usual_grade = usual_grade.val();
+                    student.design_grade = design_grade.val();
+                    student.exam_grade = exam_grade.val();
+
+                    $.ajax({
+                        url: 'http://localhost:9000/students/update',
+                        type: 'POST',
+                        cache: false,
+                        dataType:'json',
+                        data: student
+                    }).done(function(res) {
+                        console.log(res);
+                    }).fail(function(res) {
+                        console.log(res);
+                    });   
+                    bindEvent();  
                     $(this).dialog("close");
                 },
                 "取消": function(){
@@ -184,28 +161,56 @@
                 var b = $(this);  
                 var tr = b.parents("tr");  
                 var tds = tr.children();  
-                    //设置初始值  
-                    stu_number.val(tds.eq(0).text());
-                    name.val(tds.eq(1).text());  
-                    department.val(tds.eq(2).text());  
-                    total.val(tds.eq(3).text());  
+                //设置初始值  
+                stu_number.val(tds.eq(0).text());
+                name.val(tds.eq(1).text());  
+                department.val(tds.eq(2).text());  
+                total.val(tds.eq(3).text());  
 
-                    var trs = b.parents("tbody").children();  
-                    //设置行号，以行号为标识，进行修改。  
-                    rowindex.val(trs.index(tr));  
+                var trs = b.parents("tbody").children();  
+                //设置行号，以行号为标识，进行修改。  
+                rowindex.val(trs.index(tr));  
 
-                    //打开对话框  
-                    $( "#dialog-form" ).dialog( "open" );  
-                });  
+                //打开对话框  
+                $( "#dialog-form" ).dialog( "open" );  
+            });  
 
             //绑定Delete按钮的单击事件  
-            $(".DeleteButton").click(function(){  
+            $(".DeleteButton").click(function(){ 
+                var b = $(this);  
+                var tr = b.parents("tr");  
+                var tds = tr.children();  
+                //设置初始值  
+                stu_number.val(tds.eq(0).text());
+                var temp = new Object();
+                temp.id = stu_number.val();
+
+                $.ajax({
+                    url: 'http://localhost:9000/students/delete',
+                    type: 'POST',
+                    data: temp,
+                    cache: false,
+                    dataType:'json'
+                }).done(function(res) {
+                    console.log(res);
+                }).fail(function(res) {
+                    console.log(res);
+                });    
                 var tr = $(this).parents("tr");  
                 tr.remove();  
             }); 
 
             //绑定Grade按钮的单击事件
             $(".GradeButton").click(function(){
+                var b = $(this);  
+                var tr = b.parents("tr");  
+                var tds = tr.children();  
+                //设置初始值  
+                stu_number.val(tds.eq(0).text());
+                name.val(tds.eq(1).text());  
+                department.val(tds.eq(2).text());  
+                total.val(tds.eq(3).text());  
+
                 $("#dialog-grade").dialog("open");
             });
         };  

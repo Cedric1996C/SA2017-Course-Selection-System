@@ -20,10 +20,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/users/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/students/pageInfo").permitAll()
                 .antMatchers("/batchimport").permitAll()
-                .antMatchers(HttpMethod.POST, "/students").permitAll()
+                .antMatchers(HttpMethod.POST, "/students/*").permitAll()
                 .antMatchers(HttpMethod.POST,"/students/add").permitAll()
                 .antMatchers(HttpMethod.POST,"/students/update").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/students/delete/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/students/delete").permitAll()
                 .anyRequest().authenticated();
     }
 
