@@ -40,8 +40,10 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
-    public PageInfo<Student> addStudent(@RequestBody Student student){
-       studentService.save(student);
+    @ResponseBody
+    public PageInfo<Student> addStudent(Long id, String name, String department, String grade , Integer usual_grade,Integer design_grade,Integer exam_grade){
+        Student student = new Student(id,name,department,grade,usual_grade,design_grade,exam_grade);
+        studentService.save(student);
         List<Student> studentList = studentService.getAll();
         return new PageInfo<Student>(studentList);
     }
@@ -54,7 +56,9 @@ public class StudentController {
     }
 
     @RequestMapping( value = "/update",method = RequestMethod.POST)
-    public PageInfo<Student> updateStudent (@RequestBody Student student){
+    public PageInfo<Student> updateStudent (Long id, String name, String department, String grade , Integer usual_grade,Integer design_grade,Integer exam_grade){
+        Student student = new Student(id,name,department,grade,usual_grade,design_grade,exam_grade);
+        System.out.print(student);
         studentService.updateStudent(student);
         List<Student> studentList = studentService.getAll();
         return new PageInfo<Student>(studentList);

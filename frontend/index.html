@@ -2,14 +2,14 @@
 <html>  
 <head>  
     <meta charset="UTF-8">  
-    <title>dialog demos</title>  
+    <title>SA2017选课管理</title>  
     <!--根据JQuery.UI的例子改写，by wallimn, 2012-08-01-->  
-    <link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">  
-    <link rel="stylesheet" href="dist/bootstrap-float-label.css"/> 
+    <link rel="stylesheet" type="text/css" href="jquery-ui-1.12.1/jquery-ui.css">  
+    <link rel="stylesheet" type="text/css" href="dist/bootstrap-float-label.css"/> 
     <link rel="stylesheet" type="text/css" href="css/index.css">                 
-    <script src="js/jquery-1.12.3.min.js"></script>  
+    <script src="src/jquery-1.12.3.min.js"></script>  
     <script src="jquery-ui-1.12.1/jquery-ui.js"></script>  
-    <script type="text/javascript" src="js/example.js"></script>
+    <script type="text/javascript" src="js/operation.js"></script>
 </head>  
 <body>  
   
@@ -39,11 +39,35 @@
     </form>  
 </div>  
   
+ <div id="dialog-modify" title="编辑信息" >  
+    <form >  
+    <fieldset> 
+        <div style="margin-top: 20px;">  
+             <label for="stu-number">学号</label>  
+             <input type="text" name="stu-number" id="stu-number" class="text" /> 
+        </div> 
+        <div>
+        <label for="name">姓名</label>  
+        <input type="text" name="name" id="name" value="" class="text" />
+        </div>
+        <div>
+        <label for="department">专业</label>  
+        <input type="department" name="department" id="department" value="" class="text" /> 
+        </div>
+        <div> 
+        <label for="total">综合评价</label>
+        <input type="total" name="total" id="total" value="" class="text">
+        </div>
+        <input type="hidden" name="rowindex" id="rowindex" value=""/>  
+    </fieldset>  
+    </form>  
+</div> 
+  
 <div id="dialog-import" title="导入Excel文件">   
-    <div style="margin-top: 20px;">
-        <label>路径</label>  
-        <input type="text" name="name" id="path" class="text" /> 
-        <button>浏览</button>    
+    <div style="margin-top: 20px;" align="center">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input id="file" type="file" name="filename"/>
+        </form>
     </div> 
 </div>
 
@@ -83,14 +107,14 @@
                 <td>wallimn@sohu.com</td>  
                 <td>wallimn</td>  
                 <td>json</td>
-                <td><button class="EditButton" >编辑</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>  
+                <td><button class="EditButton" >修改</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>  
             </tr>  
             <tr>  
                 <td>John Doe</td>  
                 <td>john.doe@example.com</td>  
                 <td>johndoe</td> 
                 <td>json</td> 
-                <td><button class="EditButton" >编辑</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>  
+                <td><button class="EditButton" >修改</button><button class="DeleteButton">删除</button><button class="GradeButton">成绩</button></td>  
             </tr>  
         </tbody>  
     </table>  
